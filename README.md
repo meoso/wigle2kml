@@ -1,4 +1,4 @@
-./wigle2kml.sh - The WiGLE.net to KML converter for BASH - by NJD - Inspired by irongeek.com's igigle.exe
+./wigle2kml.sh - The WiGLE.net to KML converter in BASH - by NJD - Inspired by irongeek.com's igigle.exe
 
 Usage: `./wigle2kml.sh username zipcode variance lastseen ["[-v] filter[|filter[|filter]...]"]`
 

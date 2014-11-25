@@ -11,4 +11,4 @@ variance: small decimal number (0.01 to 0.2); example 0.02
 lastseen: in the form of YYYYMMDDHHMMSS; example 20140101000000
 filter: optional parameter; however, quotes ("") are required around filter list; passed verbatim to egrep, so `-v` is inverse
 example: `./wigle2kml.sh irongeek 47150 0.02 20140101000000 "linksys"`
-example: `./wigle2kml.sh irongeek 47150 0.02 20140101000000 "-v linksys|HP-Print|2WIRE"`
+example: `./wigle2kml.sh irongeek 47150 0.02 20140101000000 "-v MIFI|HP-Print|2WIRE"`

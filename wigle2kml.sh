@@ -16,7 +16,7 @@ if [ $# -lt 4 ] ; then
 	echo "	lastseen: in the form of YYYYMMDDHHMMSS; example 20140101000000"
 	echo "	filter: optional parameter; however, quotes (\"\") are required around filter list; passed verbatim to egrep, so -v is inverse"
 	echo "	example: $0 irongeek 47150 0.02 20140101000000 \"linksys\""
-	echo "	example: $0 irongeek 47150 0.02 20140101000000 \"-v linksys|HP-Print|2WIRE\""
+	echo "	example: $0 irongeek 47150 0.02 20140101000000 \"-v MIFI|HP-Print|2WIRE\""
 	echo
 	exit 1
 fi

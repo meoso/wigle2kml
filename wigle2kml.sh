@@ -33,10 +33,12 @@ else
 fi
 
 read -s -p "Password for WiGLE.net user $username:" password
+echo
 
 if ! [ -f zip_code_database.csv ]
 then
-  curl -O http://www.unitedstateszipcodes.org/zip_code_database.csv
+	echo Downloading zip_code_database.csv
+	curl -O http://www.unitedstateszipcodes.org/zip_code_database.csv
 fi
 
 lat=$(grep ^\"$zip zip_code_database.csv | awk -F, '{print $10}' | awk -F\" '{print $2}')

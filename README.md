@@ -2,7 +2,7 @@
 
 Usage: `./wigle2kml.sh username zipcode variance lastseen ["[-v] filter[|filter[|filter]...]"]`
 
-Dependencies: `curl`, `bc`, `egrep`
+Dependencies: `curl`, `bc`, `grep`, `egrep`, `awk`
 
 Automatically downloads http://www.unitedstateszipcodes.org/zip_code_database.csv
 

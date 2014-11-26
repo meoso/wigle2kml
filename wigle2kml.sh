@@ -7,7 +7,7 @@ if [ $# -lt 4 ] ; then
 	echo
 	echo "	Usage: $0 username zipcode variance lastseen [\"[-v] filter[|filter[|filter]]\"]"
 	echo
-	echo "	Dependencies: curl, bc, egrep"
+	echo "	Dependencies: curl, bc, grep, egrep, awk"
 	echo "	Automatically downloads http://www.unitedstateszipcodes.org/zip_code_database.csv"
 	echo "	Using api reference: http://www5.musatcha.com/musatcha/computers/wigleapi.htm"
 	echo
@@ -56,17 +56,13 @@ longrange1=$(echo "$long-$var" | bc)
 longrange2=$(echo "$long+$var" | bc)
 
 echo "Calculated range: ($latrange1,$longrange1) to ($latrange2,$longrange2)"
-#echo $latrange1
-#echo $latrange2
-#echo $longrange1
-#echo $longrange2
 
 function populateKMLfolder () {
 	enc=$1
 	folder=$2
 	echo "Processing Enc=$enc ($folder)"
 
-    case $enc  in
+ 	case $enc in
 		"Y")
 			iconwep="https://dl.dropboxusercontent.com/u/7346386/wifi/wep.png"
 			;;
@@ -79,9 +75,9 @@ function populateKMLfolder () {
 		"2")
 			iconwep="https://dl.dropboxusercontent.com/u/7346386/wifi/wpa2.png"
 			;;
-        *)
+		*)
 			iconwep="https://dl.dropboxusercontent.com/u/7346386/wifi/unknown.png"
-    esac 
+	esac
 
 	echo "<Folder><name>$folder</name><open>0</open>" >> $zip.kml
 

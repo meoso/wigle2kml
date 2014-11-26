@@ -41,6 +41,7 @@ then
 	curl -O http://www.unitedstateszipcodes.org/zip_code_database.csv
 fi
 
+#get lat/long from zip_code_database.csv -- not the most efficent way of doing this
 lat=$(grep ^\"$zip zip_code_database.csv | awk -F, '{print $10}' | awk -F\" '{print $2}')
 long=$(grep ^\"$zip zip_code_database.csv | awk -F, '{print $11}' | awk -F\" '{print $2}')
 
@@ -84,11 +85,11 @@ function populateKMLfolder () {
 	#as of Nov 2014: 18 elements (0-17)
 	#  0     1     2     3     4     5      6       7         8       9   10   11      12      13       14       15       16     17
 	#netid~ssid~comment~name~type~freenet~paynet~firsttime~lasttime~flags~wep~trilat~trilong~lastupdt~channel~bcninterval~qos~userfound
-	fileline=0
+	fileline=0 #debug
 	while read line ; do
-		fileline=$((fileline+1))
+		fileline=$((fileline+1)) #debug
 		IFS='~' read -a array <<< "$line"
-		#echo "file-line $fileline: ${array[0]} ${array[1]} ${array[10]}"
+		#echo "file-line $fileline: ${array[0]} ${array[1]} ${array[10]}" #debug
 
 		if [[ "${#array[@]}" -eq "18" ]] && [[ "${array[10]}" == "$enc" ]]  #needed == instead of -eq due: syntax error: operand expected (error token is "?")
 		then
@@ -124,22 +125,26 @@ function populateKMLfolder () {
 	echo "</Folder>" >> $zip.kml
 } ##END function
 
+#successful login will result in 302
 result=$(curl -s -c cookie.txt -d "credential_0=$username&credential_1=$password&noexpire=off" https://wigle.net/gps/gps/GPSDB/login/ | grep 302)
 
+# if no error (if successful 302)
 if [[ $? == 0 ]]
 then 
 	echo "Downloading data:"
 	curl -b cookie.txt -o $zip.txt "https://wigle.net/gpsopen/gps/GPSDB/confirmquery?longrange1=$longrange1&longrange2=$longrange2&latrange1=$latrange1&latrange2=$latrange2&simple=true&lastupdt=$lastupdt"
 
-		if ! [[ -z $filter ]]
-		then 
-			egrep $filter $zip.txt > filter.txt
-			mv filter.txt $zip.txt
-		fi
+	# apply filter if one was provided (ignorant of fields -- whole-line filtering)
+	if ! [[ -z $filter ]]
+	then 
+		egrep $filter $zip.txt > filter.txt
+		mv filter.txt $zip.txt
+	fi
 
-	#cat $zip.txt
+	#cat $zip.txt #debug
 	echo
 
+	#open new kml
 	echo '<?xml version="1.0" encoding="UTF-8"?><kml xmlns="http://earth.google.com/kml/2.0"><Folder><name>WiGLE Data</name><open>1</open>' > $zip.kml
 
 	populateKMLfolder "N" "Open"
@@ -148,6 +153,7 @@ then
 	populateKMLfolder "2" "WPA2"
 	populateKMLfolder "?" "Unknown"
 
+	#close kml
 	echo '</Folder></kml>' >> $zip.kml
 	echo "Finished: files created: $zip.txt and $zip.kml"
 	echo

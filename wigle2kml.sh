@@ -94,7 +94,7 @@ function populateKMLfolder () {
 		IFS='~' read -a array <<< "$line"
 		#echo "file-line $fileline: ${array[0]} ${array[1]} ${array[10]}"
 
-		if [[ "${#array[@]}" -eq "18" ]] && [[ "${array[10]}" == "$enc" ]]  #line 88: ?: syntax error: operand expected (error token is "?")
+		if [[ "${#array[@]}" -eq "18" ]] && [[ "${array[10]}" == "$enc" ]]  #needed == instead of -eq due: syntax error: operand expected (error token is "?")
 		then
 			echo "<Placemark>" >> $zip.kml
 			echo "	<description>" >> $zip.kml

@@ -7,7 +7,7 @@ if [ $# -lt 4 ] ; then
 	echo
 	echo "	Usage: $0 username zipcode variance lastseen [\"[-v] filter[|filter[|filter]]\"]"
 	echo
-	echo "	Dependencies: curl, bc, grep, egrep, awk"
+	echo "	Dependencies: curl, bc, grep, egrep, awk, WiGLE.net account"
 	echo "	Automatically downloads http://www.unitedstateszipcodes.org/zip_code_database.csv"
 	echo "	Using api reference: http://www5.musatcha.com/musatcha/computers/wigleapi.htm"
 	echo

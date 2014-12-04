@@ -8,14 +8,14 @@ Automatically downloads http://www.unitedstateszipcodes.org/zip_code_database.cs
 
 Using api reference: http://www5.musatcha.com/musatcha/computers/wigleapi.htm ; however, not using the `pagestart` variable as it seems not to be limited to 1000 records as stated.
 
-zipcode: 5-digit postal-code only
+zipcode: 5-digit U.S. postal-code only
 
-variance: small decimal number (0.01 to 0.2); example 0.02
+variance: small decimal number (0.01 to 0.2); example 0.03
 
 lastseen: in the form of YYYYMMDDHHMMSS; example 20140101000000
 
 filter: optional parameter; however, quotes ("") are required around filter list; passed verbatim to egrep, so `-v` is inverse
 
-example: `./wigle2kml.sh irongeek 47150 0.02 20140101000000 "linksys"`
+example: `./wigle2kml.sh irongeek 47150 0.03 20140101000000 "linksys"`
 
-example: `./wigle2kml.sh irongeek 47150 0.02 20140101000000 "-v MIFI|HP-Print|2WIRE"`
+example: `./wigle2kml.sh irongeek 47150 0.03 20140101000000 "-v MIFI|HP-Print|2WIRE"`

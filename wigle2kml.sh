@@ -11,12 +11,12 @@ if [ $# -lt 4 ] ; then
 	echo "	Automatically downloads http://www.unitedstateszipcodes.org/zip_code_database.csv"
 	echo "	Using api reference: http://www5.musatcha.com/musatcha/computers/wigleapi.htm"
 	echo
-	echo "	zipcode: 5-digit postal-code only"
-	echo "	variance: small decimal number (0.01 to 0.2); example 0.02"
+	echo "	zipcode: 5-digit U.S. postal-code only"
+	echo "	variance: small decimal number (0.01 to 0.2); example 0.03"
 	echo "	lastseen: in the form of YYYYMMDDHHMMSS; example 20140101000000"
 	echo "	filter: optional parameter; however, quotes (\"\") are required around filter list; passed verbatim to egrep, so -v is inverse"
-	echo "	example: $0 irongeek 47150 0.02 20140101000000 \"linksys\""
-	echo "	example: $0 irongeek 47150 0.02 20140101000000 \"-v MIFI|HP-Print|2WIRE\""
+	echo "	example: $0 irongeek 47150 0.03 20140101000000 \"linksys\""
+	echo "	example: $0 irongeek 47150 0.03 20140101000000 \"-v MIFI|HP-Print|2WIRE\""
 	echo
 	exit 1
 fi

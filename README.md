@@ -6,7 +6,7 @@ Dependencies: `curl`, `bc`, `grep`, `egrep`, `awk`
 
 Automatically downloads http://www.unitedstateszipcodes.org/zip_code_database.csv
 
-Using api reference: http://www5.musatcha.com/musatcha/computers/wigleapi.htm
+Using api reference: http://www5.musatcha.com/musatcha/computers/wigleapi.htm ; however, not using the `pagestart` variable as it seems not to be limited to 1000 records as stated.
 
 zipcode: 5-digit postal-code only
 

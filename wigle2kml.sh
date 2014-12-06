@@ -159,6 +159,7 @@ then
 	echo
 else
 	echo "failed to authenticate."
+	exit 1
 fi
 
 exit 0

@@ -6,7 +6,7 @@ Dependencies: `curl`, `bc`, `grep`, `egrep`, `awk`, WiGLE.net account.
 
 Automatically downloads http://www.unitedstateszipcodes.org/zip_code_database.csv.  I chose this database because my zipcode had an accurate lat/long as opposed to other databases found.
 
-Using api reference: http://www5.musatcha.com/musatcha/computers/wigleapi.htm ; however, not using the `pagestart` variable as it seems not to be limited to 1000 records as stated.
+Using api reference: http://www5.musatcha.com/musatcha/computers/wigleapi.htm ; however, not using the `pagestart` variable as it seems not to be limited to 1000 records as stated.  Also this API is slightly stale and thus the wigle.net output is now 18 columns.
 
 zipcode: 5-digit U.S. postal-code only
 

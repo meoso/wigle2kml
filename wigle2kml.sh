@@ -32,8 +32,6 @@ else
 	filter=$5
 fi
 
-read -s -p "Password for WiGLE.net user $username:" password
-echo
 
 if ! [ -f zip_code_database.csv ]
 then
@@ -42,8 +40,27 @@ then
 fi
 
 #get lat/long from zip_code_database.csv -- not the most efficent way of doing this
-lat=$(grep ^\"$zip zip_code_database.csv | awk -F, '{print $10}' | awk -F\" '{print $2}')
-long=$(grep ^\"$zip zip_code_database.csv | awk -F, '{print $11}' | awk -F\" '{print $2}')
+#lat=$(grep ^\"$zip zip_code_database.csv | awk -F, '{print $10}' | awk -F\" '{print $2}')
+#long=$(grep ^\"$zip zip_code_database.csv | awk -F, '{print $11}' | awk -F\" '{print $2}')
+
+if ! [ -f NEW_ZIP.csv ]
+then
+   cat zip_code_database.csv | sed 's/\",\"/ↈ/g' | sed 's/,\"/ↈ/g' | sed 's/\",/ↈ/g' | sed 's/\"//g' | sed 's/ↈ,/ↈↈ/g' | sed 's/,ↈ/ↈↈ/g' | sed 's/,,/ↈↈ/g' > NEW_ZIP.csv
+fi
+
+line=""
+line=$(grep ^$zip NEW_ZIP.csv)
+
+if [ "${line}" == "" ]
+then
+	echo Zip $zip not found.
+	exit 1
+fi
+
+IFS=ↈ read -a array <<< $line
+
+lat=${array[9]}
+long=${array[10]}
 
 echo
 echo Zip:$zip
@@ -124,6 +141,10 @@ function populateKMLfolder () {
 
 	echo "</Folder>" >> $zip.kml
 } ##END function
+
+
+echo
+read -s -p "Password for WiGLE.net user $username:" password
 
 #successful login will result in 302
 result=$(curl -s -c cookie.txt -d "credential_0=$username&credential_1=$password&noexpire=off" https://wigle.net/gps/gps/GPSDB/login/ | grep 302)

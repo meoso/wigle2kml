@@ -1,6 +1,4 @@
-*.txt
-*.kml
-*.csv
-*.zip
-~*
-*~
+*
+!.gitignore
+!wigle2kml.sh
+!README.md

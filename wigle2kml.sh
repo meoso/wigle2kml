@@ -39,10 +39,7 @@ then
 	curl -O http://www.unitedstateszipcodes.org/zip_code_database.csv
 fi
 
-#get lat/long from zip_code_database.csv -- not the most efficent way of doing this
-#lat=$(grep ^\"$zip zip_code_database.csv | awk -F, '{print $10}' | awk -F\" '{print $2}')
-#long=$(grep ^\"$zip zip_code_database.csv | awk -F, '{print $11}' | awk -F\" '{print $2}')
-
+#Since the csv also has quotes, let's reform it using ↈ as the delimiter, but keeping the commas inside the previously quoted field values.
 if ! [ -f NEW_ZIP.csv ]
 then
    cat zip_code_database.csv | sed 's/\",\"/ↈ/g' | sed 's/,\"/ↈ/g' | sed 's/\",/ↈ/g' | sed 's/\"//g' | sed 's/ↈ,/ↈↈ/g' | sed 's/,ↈ/ↈↈ/g' | sed 's/,,/ↈↈ/g' > NEW_ZIP.csv

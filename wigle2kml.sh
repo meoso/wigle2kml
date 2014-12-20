@@ -32,7 +32,6 @@ else
 	filter=$5
 fi
 
-
 if ! [ -f zip_code_database.csv ]
 then
 	echo Downloading zip_code_database.csv
@@ -46,24 +45,24 @@ then
 fi
 
 line=""
-line=$(grep ^$zip NEW_ZIP.csv)
+line=$(grep ^"$zip" NEW_ZIP.csv)
 
 if [ "${line}" == "" ]
 then
-	echo Zip $zip not found.
+	echo Zip "$zip" not found.
 	exit 1
 fi
 
-IFS=ↈ read -a array <<< $line
+IFS=ↈ read -a array <<< "$line"
 
 lat=${array[9]}
 long=${array[10]}
 
 echo
-echo Zip:$zip
-echo Lat:$lat
-echo Long:$long
-echo Variance:$var
+echo "Zip:$zip"
+echo "Lat:$lat"
+echo "Long:$long"
+echo "Variance:$var"
 
 latrange1=$(echo "$lat-$var" | bc)
 latrange2=$(echo "$lat+$var" | bc)
@@ -94,7 +93,7 @@ function populateKMLfolder () {
 			iconwep="https://dl.dropboxusercontent.com/u/7346386/wifi/unknown.png"
 	esac
 
-	echo "<Folder><name>$folder</name><open>0</open>" >> $zip.kml
+	echo "<Folder><name>$folder</name><open>0</open>" >> "$zip".kml
 
 	#as of Nov 2014: 18 elements (0-17)
 	#  0     1     2     3     4     5      6       7         8       9   10   11      12      13       14       15       16     17
@@ -107,36 +106,36 @@ function populateKMLfolder () {
 
 		if [[ "${#array[@]}" -eq "18" ]] && [[ "${array[10]}" == "$enc" ]]  #needed == instead of -eq due: syntax error: operand expected (error token is "?")
 		then
-			echo "<Placemark>" >> $zip.kml
-			echo "	<description>" >> $zip.kml
-			echo "		<![CDATA[" >> $zip.kml
-			echo "			SSID: $array[0] <BR>" >> $zip.kml
-			echo "			BSSID: ${array[1]} <BR>" >> $zip.kml
-			echo "			TYPE: ${array[4]} <BR>" >> $zip.kml
-			echo "			ENCRYPTION: ${array[10]} <BR>" >> $zip.kml
-			echo "			CHANNEL: ${array[14]} <BR>" >> $zip.kml
-			echo "			QOS: ${array[16]} <BR>" >> $zip.kml
-			echo "			Last Seen: ${array[13]} <BR>" >> $zip.kml
-			echo "			Latitude: ${array[11]} <BR>" >> $zip.kml
-			echo "			Longitude: ${array[12]} <BR>" >> $zip.kml
-			echo "		]]>" >> $zip.kml
-			echo "	</description>" >> $zip.kml
-			echo "	<name><![CDATA[${array[1]}]]></name>" >> $zip.kml
-			echo "	<Style>" >> $zip.kml
-			echo "		<IconStyle>" >> $zip.kml
-			echo "		<Icon>;" >> $zip.kml
-			echo "			<href>$iconwep</href>" >> $zip.kml
-			echo "		</Icon>" >> $zip.kml
-			echo "		</IconStyle>" >> $zip.kml
-			echo "	</Style>" >> $zip.kml
-			echo "	<Point id=\"$folder_${array[0]}\">" >> $zip.kml
-			echo "		<coordinates>${array[12]},${array[11]}</coordinates>" >> $zip.kml
-			echo "	</Point>" >> $zip.kml
-			echo "</Placemark>" >> $zip.kml
+			echo "<Placemark>" >> "$zip".kml
+			echo "	<description>" >> "$zip".kml
+			echo "		<![CDATA[" >> "$zip".kml
+			echo "			SSID: $array[0] <BR>" >> "$zip".kml
+			echo "			BSSID: ${array[1]} <BR>" >> "$zip".kml
+			echo "			TYPE: ${array[4]} <BR>" >> "$zip".kml
+			echo "			ENCRYPTION: ${array[10]} <BR>" >> "$zip".kml
+			echo "			CHANNEL: ${array[14]} <BR>" >> "$zip".kml
+			echo "			QOS: ${array[16]} <BR>" >> "$zip".kml
+			echo "			Last Seen: ${array[13]} <BR>" >> "$zip".kml
+			echo "			Latitude: ${array[11]} <BR>" >> "$zip".kml
+			echo "			Longitude: ${array[12]} <BR>" >> "$zip".kml
+			echo "		]]>" >> "$zip".kml
+			echo "	</description>" >> "$zip".kml
+			echo "	<name><![CDATA[${array[1]}]]></name>" >> "$zip".kml
+			echo "	<Style>" >> "$zip".kml
+			echo "		<IconStyle>" >> "$zip".kml
+			echo "		<Icon>;" >> "$zip".kml
+			echo "			<href>$iconwep</href>" >> "$zip".kml
+			echo "		</Icon>" >> "$zip".kml
+			echo "		</IconStyle>" >> "$zip".kml
+			echo "	</Style>" >> "$zip".kml
+			echo "	<Point id=\"$folder_${array[0]}\">" >> "$zip".kml
+			echo "		<coordinates>${array[12]},${array[11]}</coordinates>" >> "$zip".kml
+			echo "	</Point>" >> "$zip".kml
+			echo "</Placemark>" >> "$zip".kml
 		fi
-	done <$zip.txt
+	done <"$zip".txt
 
-	echo "</Folder>" >> $zip.kml
+	echo "</Folder>" >> "$zip".kml
 } ##END function
 
 
@@ -150,20 +149,20 @@ result=$(curl -s -c cookie.txt -d "credential_0=$username&credential_1=$password
 if [[ $? == 0 ]]
 then 
 	echo "Downloading data:"
-	curl -b cookie.txt -o $zip.txt "https://wigle.net/gpsopen/gps/GPSDB/confirmquery?longrange1=$longrange1&longrange2=$longrange2&latrange1=$latrange1&latrange2=$latrange2&simple=true&lastupdt=$lastupdt"
+	curl -b cookie.txt -o "$zip".txt "https://wigle.net/gpsopen/gps/GPSDB/confirmquery?longrange1=$longrange1&longrange2=$longrange2&latrange1=$latrange1&latrange2=$latrange2&simple=true&lastupdt=$lastupdt"
 
 	# apply filter if one was provided (ignorant of fields -- whole-line filtering)
 	if ! [[ -z $filter ]]
 	then 
-		egrep $filter $zip.txt > filter.txt
-		mv filter.txt $zip.txt
+		egrep $filter "$zip".txt > filter.txt
+		mv filter.txt "$zip".txt
 	fi
 
-	#cat $zip.txt #debug
+	#cat "$zip".txt #debug
 	echo
 
 	#open new kml
-	echo '<?xml version="1.0" encoding="UTF-8"?><kml xmlns="http://earth.google.com/kml/2.0"><Folder><name>WiGLE Data</name><open>1</open>' > $zip.kml
+	echo '<?xml version="1.0" encoding="UTF-8"?><kml xmlns="http://earth.google.com/kml/2.0"><Folder><name>WiGLE Data</name><open>1</open>' > "$zip".kml
 
 	populateKMLfolder "N" "Open"
 	populateKMLfolder "Y" "WEP"
@@ -172,7 +171,7 @@ then
 	populateKMLfolder "?" "Unknown"
 
 	#close kml
-	echo '</Folder></kml>' >> $zip.kml
+	echo '</Folder></kml>' >> "$zip".kml
 	echo "Finished: files created: $zip.txt and $zip.kml"
 	echo
 else

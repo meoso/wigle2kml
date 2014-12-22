@@ -41,7 +41,8 @@ fi
 #Since the csv also has quotes, let's reform it using ↈ as the delimiter, but keeping the commas inside the previously quoted field values.
 if ! [ -f NEW_ZIP.csv ]
 then
-   cat zip_code_database.csv | sed 's/\",\"/ↈ/g' | sed 's/,\"/ↈ/g' | sed 's/\",/ↈ/g' | sed 's/\"//g' | sed 's/ↈ,/ↈↈ/g' | sed 's/,ↈ/ↈↈ/g' | sed 's/,,/ↈↈ/g' > NEW_ZIP.csv
+	#replace (",") (,") (",) then remove (") and finally replace lingering field seperators that do not have values - denoted by (,,) (ↈ,) (,ↈ)
+	cat zip_code_database.csv | sed 's/\",\"/ↈ/g' | sed 's/,\"/ↈ/g' | sed 's/\",/ↈ/g' | sed 's/\"//g' | sed 's/ↈ,/ↈↈ/g' | sed 's/,ↈ/ↈↈ/g' | sed 's/,,/ↈↈ/g' > NEW_ZIP.csv
 fi
 
 line=""

@@ -32,8 +32,8 @@ Outputs: zip_filtered.txt and zip_filtered.kml files
 Dependencies: `egrep`
 
 Parameters:  
-zip - required; 5-digit U.S. postal-code only ; reads local zip.txt file  
+zip - required ; 5-digit U.S. postal-code only ; reads local zip.txt file  
 filter - optional ; however, quotes ("") are required around filter list; passed verbatim to egrep, so -v is inverse  
 
-example usage: `./filter-existing.sh 47150 \"linksys\"`  
-example usage: `./filter-existing.sh 47150 \"-v MIFI|HP-Print|2WIRE\"`  
+example usage: `./filter-existing.sh 47150 "linksys"`  
+example usage: `./filter-existing.sh 47150 "-v MIFI|HP-Print|2WIRE"`  

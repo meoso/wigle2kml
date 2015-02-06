@@ -3,20 +3,24 @@
 #Check for at least 4 arguments
 if [ $# -lt 4 ] ; then
 	echo
-	echo "	$0 - The WiGLE.net to KML converter in BASH - by NJD - Inspired by irongeek.com's igigle.exe"
+	echo "$0 - The WiGLE.net to KML converter in BASH - by NJD - Inspired by irongeek.com's igigle.exe"
 	echo
-	echo "	Usage: $0 username zipcode variance lastseen [\"[-v] filter[|filter[|filter]]\"]"
+	echo "Usage: $0 username zipcode variance lastseen [\"[-v] filter[|filter[|filter]]\"]"
 	echo
-	echo "	Dependencies: curl, bc, grep, egrep, awk, WiGLE.net account"
-	echo "	Automatically downloads http://www.unitedstateszipcodes.org/zip_code_database.csv"
-	echo "	Using api reference: http://www5.musatcha.com/musatcha/computers/wigleapi.htm"
+	echo "Outputs: zip.txt and zip.kml files"	
 	echo
-	echo "	zipcode: 5-digit U.S. postal-code only"
-	echo "	variance: small decimal number (0.01 to 0.2); example 0.03"
-	echo "	lastseen: in the form of YYYYMMDDHHMMSS; example 20140101000000"
-	echo "	filter: optional parameter; however, quotes (\"\") are required around filter list; passed verbatim to egrep, so -v is inverse"
-	echo "	example: $0 irongeek 47150 0.03 20140101000000 \"linksys\""
-	echo "	example: $0 irongeek 47150 0.03 20140101000000 \"-v MIFI|HP-Print|2WIRE\""
+	echo "Dependencies: curl, bc, grep, egrep, WiGLE.net account"
+	echo "Automatically downloads http://www.unitedstateszipcodes.org/zip_code_database.csv"
+	echo "Using api reference: http://www5.musatcha.com/musatcha/computers/wigleapi.htm"
+	echo
+	echo "Parameters"
+	echo "zipcode: required ; 5-digit U.S. postal-code only ; uses this to parse data from zip_code_database.csv"
+	echo "variance: required ; small decimal number (0.01 to 0.2); example 0.03"
+	echo "lastseen: required ; in the form of YYYYMMDDHHMMSS; example 20140101000000"
+	echo "filter: optional ; however, quotes (\"\") are required around filter list; passed verbatim to egrep, so -v is inverse"
+	echo 
+	echo "example usage: $0 irongeek 47150 0.03 20140101000000 \"linksys\""
+	echo "example usage: $0 irongeek 47150 0.03 20140101000000 \"-v MIFI|HP-Print|2WIRE\""
 	echo
 	exit 1
 fi

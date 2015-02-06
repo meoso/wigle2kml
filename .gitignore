@@ -2,3 +2,5 @@
 !.gitignore
 !wigle2kml.sh
 !README.md
+!filter-existing.sh
+

@@ -7,7 +7,7 @@ if [ $# -lt 4 ] ; then
 	echo
 	echo "Usage: $0 username zipcode variance lastseen [\"[-v] filter[|filter[|filter]]\"]"
 	echo
-	echo "Outputs: zip.txt and zip.kml files"	
+	echo "Outputs: zip.txt and zip.kml files"
 	echo
 	echo "Dependencies: curl, bc, grep, egrep, WiGLE.net account"
 	echo "Automatically downloads http://www.unitedstateszipcodes.org/zip_code_database.csv"
@@ -18,7 +18,7 @@ if [ $# -lt 4 ] ; then
 	echo "variance: required ; small decimal number (0.01 to 0.2); example 0.03"
 	echo "lastseen: required ; in the form of YYYYMMDDHHMMSS; example 20140101000000"
 	echo "filter: optional ; however, quotes (\"\") are required around filter list; passed verbatim to egrep, so -v is inverse"
-	echo 
+	echo
 	echo "example usage: $0 irongeek 47150 0.03 20140101000000 \"linksys\""
 	echo "example usage: $0 irongeek 47150 0.03 20140101000000 \"-v MIFI|HP-Print|2WIRE\""
 	echo
@@ -30,7 +30,7 @@ zip=$2
 var=$3
 lastupdt=$4
 if [[ -z $1 ]]
-then 
+then
 	filter=""
 else
 	filter=$5
@@ -152,13 +152,13 @@ result=$(curl -s -c cookie.txt -d "credential_0=$username&credential_1=$password
 
 # if no error (if successful 302)
 if [[ $? == 0 ]]
-then 
+then
 	echo "Downloading data:"
 	curl -b cookie.txt -o "$zip".txt "https://wigle.net/gpsopen/gps/GPSDB/confirmquery?longrange1=$longrange1&longrange2=$longrange2&latrange1=$latrange1&latrange2=$latrange2&simple=true&lastupdt=$lastupdt"
 
 	# apply filter if one was provided (ignorant of fields -- whole-line filtering)
 	if ! [[ -z $filter ]]
-	then 
+	then
 		egrep $filter "$zip".txt > filter.txt
 		mv filter.txt "$zip".txt
 	fi

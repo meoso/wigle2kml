@@ -84,18 +84,23 @@ function populateKMLfolder () {
  	case $enc in
 		"N")
 			iconwep="https://dl.dropboxusercontent.com/u/7346386/wifi/open.png"
+			label_color="ff0000FF" #red #alpha/B/G/R
 			;;
 		"Y")
 			iconwep="https://dl.dropboxusercontent.com/u/7346386/wifi/wep.png"
+			label_color="ff00FFFF" #yellow #alpha/B/G/R
 			;;
 		"W")
 			iconwep="https://dl.dropboxusercontent.com/u/7346386/wifi/wpa.png"
+			label_color="ffFFFF00" #cyan #alpha/B/G/R
 			;;
 		"2")
 			iconwep="https://dl.dropboxusercontent.com/u/7346386/wifi/wpa2.png"
+			label_color="ffFF6600" #blue #alpha/B/G/R
 			;;
 		*)
 			iconwep="https://dl.dropboxusercontent.com/u/7346386/wifi/unknown.png"
+			label_color="ffFFFFFF" #white #alpha/B/G/R
 	esac
 
 	echo "<Folder><name>$folder</name><open>0</open>" >> "$zip".kml
@@ -133,7 +138,10 @@ function populateKMLfolder () {
 			echo "				<href>$iconwep</href>" >> "$zip".kml
 			echo "			</Icon>" >> "$zip".kml
 			echo "		</IconStyle>" >> "$zip".kml
-			echo "		<LabelStyle><scale>0.60</scale></LabelStyle>" >> "$zip".kml
+			echo "		<LabelStyle>" >> "$zip".kml
+			echo "			<scale>0.70</scale>" >> "$zip".kml
+			echo "			<color>${label_color}</color>" >> "$zip".kml
+			echo "		</LabelStyle>" >> "$zip".kml
 			echo "	</Style>" >> "$zip".kml
 			echo "	<Point id=\"$folder_${array[0]}\">" >> "$zip".kml
 			echo "		<coordinates>${array[12]},${array[11]}</coordinates>" >> "$zip".kml

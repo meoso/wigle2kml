@@ -82,11 +82,11 @@ function populateKMLfolder () {
 	echo "Processing Enc=$enc ($folder)"
 
  	case $enc in
-		"Y")
-			iconwep="https://dl.dropboxusercontent.com/u/7346386/wifi/wep.png"
-			;;
 		"N")
 			iconwep="https://dl.dropboxusercontent.com/u/7346386/wifi/open.png"
+			;;
+		"Y")
+			iconwep="https://dl.dropboxusercontent.com/u/7346386/wifi/wep.png"
 			;;
 		"W")
 			iconwep="https://dl.dropboxusercontent.com/u/7346386/wifi/wpa.png"
@@ -128,10 +128,12 @@ function populateKMLfolder () {
 			echo "	<name><![CDATA[${array[1]}]]></name>" >> "$zip".kml
 			echo "	<Style>" >> "$zip".kml
 			echo "		<IconStyle>" >> "$zip".kml
-			echo "		<Icon>;" >> "$zip".kml
-			echo "			<href>$iconwep</href>" >> "$zip".kml
-			echo "		</Icon>" >> "$zip".kml
+			echo "			<scale>1.0</scale>" >> "$zip".kml
+			echo "			<Icon>;" >> "$zip".kml
+			echo "				<href>$iconwep</href>" >> "$zip".kml
+			echo "			</Icon>" >> "$zip".kml
 			echo "		</IconStyle>" >> "$zip".kml
+			echo "		<LabelStyle><scale>0.60</scale></LabelStyle>" >> "$zip".kml
 			echo "	</Style>" >> "$zip".kml
 			echo "	<Point id=\"$folder_${array[0]}\">" >> "$zip".kml
 			echo "		<coordinates>${array[12]},${array[11]}</coordinates>" >> "$zip".kml

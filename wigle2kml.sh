@@ -9,7 +9,7 @@ if [ $# -lt 4 ] ; then
 	echo
 	echo "Outputs: zip.txt and zip.kml files"
 	echo
-	echo "Dependencies: curl, bc, grep, egrep, WiGLE.net account"
+	echo "Dependencies: csvtool, curl, bc, grep, egrep, WiGLE.net account"
 	echo "Automatically downloads http://www.unitedstateszipcodes.org/zip_code_database.csv"
 	echo "Using api reference: http://www5.musatcha.com/musatcha/computers/wigleapi.htm"
 	echo
@@ -25,6 +25,15 @@ if [ $# -lt 4 ] ; then
 	exit 1
 fi
 
+
+if ! ( which csvtool 2>&1 >/dev/null )
+then
+	echo "Please install \"csvtool\" from your distribution repository. Aborted."
+	echo ""
+	exit 1
+fi
+
+
 username=$1
 zip=$2
 var=$3
@@ -36,21 +45,18 @@ else
 	filter=$5
 fi
 
-if ! [ -f zip_code_database.csv ]
+touch -d "$(date -d '30 days ago')" 30DAYSAGO
+
+if ! [ -f zip_code_database.csv ] || [ zip_code_database.csv -ot 30DAYSAGO ]
 then
 	echo Downloading zip_code_database.csv
 	curl -O http://www.unitedstateszipcodes.org/zip_code_database.csv
 fi
 
-#Since the csv also has quotes, let's reform it using ↈ as the delimiter, but keeping the commas inside the previously quoted field values.
-if ! [ -f NEW_ZIP.csv ]
-then
-	#replace (",") (,") (",) then remove (") and finally replace lingering field seperators that do not have values - denoted by (,,) (ↈ,) (,ↈ)
-	cat zip_code_database.csv | sed 's/\",\"/ↈ/g' | sed 's/,\"/ↈ/g' | sed 's/\",/ↈ/g' | sed 's/\"//g' | sed 's/ↈ,/ↈↈ/g' | sed 's/,ↈ/ↈↈ/g' | sed 's/,,/ↈↈ/g' > NEW_ZIP.csv
-fi
+rm 30DAYSAGO 2>&1 >/dev/null
 
 line=""
-line=$(grep ^"$zip" NEW_ZIP.csv)
+line=$(grep ^"$zip" zip_code_database.csv)
 
 if [ "${line}" == "" ]
 then
@@ -58,10 +64,13 @@ then
 	exit 1
 fi
 
-IFS=ↈ read -a array <<< "$line"
+#use csvtool for csv processing
+IFS=' '
+set -- $(grep $zip zip_code_database.csv | csvtool col 10,11 - | awk -F, '{print $1 " " $2}')
+lat=$1 long=$2
 
-lat=${array[9]}
-long=${array[10]}
+#lat=${array[9]}
+#long=${array[10]}
 
 echo
 echo "Zip:$zip"

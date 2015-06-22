@@ -53,6 +53,12 @@ then
 	curl -O http://www.unitedstateszipcodes.org/zip_code_database.csv
 fi
 
+if ! [ -f oui.txt ] || [ oui.txt -ot 30DAYSAGO ]
+then
+	echo "Downloading IEEE MA-L MAC address oui.txt"
+	curl -O http://standards-oui.ieee.org/oui.txt
+fi
+
 rm 30DAYSAGO 2>&1 >/dev/null
 
 line=""
@@ -123,13 +129,18 @@ function populateKMLfolder () {
 		IFS='~' read -a array <<< "$line"
 		#echo "file-line $fileline: ${array[0]} ${array[1]} ${array[10]}" #debug
 
+		#find MAC vendor
+		lookup=$(echo $array[0] | awk -F":" '{print $1 $2 $3}')
+		vendor=$(grep $lookup oui.txt | awk -F')' '{print $2}' | sed -e 's/^[ \t]*//')
+
 		if [[ "${#array[@]}" -eq "18" ]] && [[ "${array[10]}" == "$enc" ]]  #needed == instead of -eq due: syntax error: operand expected (error token is "?")
 		then
 			echo "<Placemark>" >> "$zip".kml
 			echo "	<description>" >> "$zip".kml
 			echo "		<![CDATA[" >> "$zip".kml
-			echo "			SSID: $array[0] <BR>" >> "$zip".kml
 			echo "			BSSID: ${array[1]} <BR>" >> "$zip".kml
+			echo "			SSID: $array[0] <BR>" >> "$zip".kml
+			echo "			VENDOR: ${vendor} <BR>" >> "$zip".kml
 			echo "			TYPE: ${array[4]} <BR>" >> "$zip".kml
 			echo "			ENCRYPTION: ${array[10]} <BR>" >> "$zip".kml
 			echo "			CHANNEL: ${array[14]} <BR>" >> "$zip".kml

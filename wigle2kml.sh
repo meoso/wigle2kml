@@ -57,12 +57,14 @@ if ! [ -f oui.txt ] || [ oui.txt -ot 30DAYSAGO ]
 then
 	echo "Downloading IEEE MA-L MAC address oui.txt"
 	curl -O http://standards-oui.ieee.org/oui.txt
+	cat oui.txt | grep -F "(base 16)" | awk '{$2=$3="" ; print $0}' | awk -F"   " '{print $1 ":" $2}' > tempOUI
+	mv tempOUI oui.txt
 fi
 
 rm 30DAYSAGO 2>&1 >/dev/null
 
 line=""
-line=$(grep ^"$zip" zip_code_database.csv)
+line=$(grep -m 1 ^"$zip" zip_code_database.csv)
 
 if [ "${line}" == "" ]
 then
@@ -72,7 +74,7 @@ fi
 
 #use csvtool for csv processing
 IFS=' '
-set -- $(grep $zip zip_code_database.csv | csvtool col 10,11 - | awk -F, '{print $1 " " $2}')
+set -- $(grep ^"$zip" zip_code_database.csv | csvtool col 10,11 - | awk -F, '{print $1 " " $2}')
 lat=$1 long=$2
 
 #lat=${array[9]}
@@ -131,7 +133,7 @@ function populateKMLfolder () {
 
 		#find MAC vendor
 		lookup=$(echo $array[0] | awk -F":" '{print $1 $2 $3}')
-		vendor=$(grep $lookup oui.txt | awk -F')' '{print $2}' | sed -e 's/^[ \t]*//')
+		vendor=$(grep -m 1 ^"$lookup" oui.txt | awk -F':' '{print $2}')
 
 		if [[ "${#array[@]}" -eq "18" ]] && [[ "${array[10]}" == "$enc" ]]  #needed == instead of -eq due: syntax error: operand expected (error token is "?")
 		then

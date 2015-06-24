@@ -16,15 +16,14 @@ if [ $# -lt 4 ] ; then
 	echo "Parameters"
 	echo "zipcode: required ; 5-digit U.S. postal-code only ; uses this to parse data from zip_code_database.csv"
 	echo "variance: required ; small decimal number (0.01 to 0.2); example 0.03"
-	echo "lastseen: required ; in the form of YYYYMMDDHHMMSS; example 20140101000000"
+	echo "lastseen: required ; in the form of YYYY[MMDD[HHMMSS]]; example 2015 or 20150701 or 20141231235959"
 	echo "filter: optional ; however, quotes (\"\") are required around filter list; passed verbatim to egrep, so -v is inverse"
 	echo
-	echo "example usage: $0 irongeek 47150 0.03 20140101000000 \"linksys\""
-	echo "example usage: $0 irongeek 47150 0.03 20140101000000 \"-v MIFI|HP-Print|2WIRE\""
+	echo "example usage: $0 irongeek 47150 0.03 20150101 \"[Ll]inksys\""
+	echo "example usage: $0 irongeek 47150 0.03 20141231235959 \"-v MIFI|HP-Print|2WIRE\""
 	echo
 	exit 1
 fi
-
 
 if ! ( which csvtool 2>&1 >/dev/null )
 then
@@ -33,12 +32,28 @@ then
 	exit 1
 fi
 
-
 username=$1
 zip=$2
 var=$3
 lastupdt=$4
-if [[ -z $1 ]]
+
+case ${#4} in
+4)
+  lastupdt=$4"0101000000"
+  ;;
+8)
+  lastupdt=$4"000000"
+  ;;
+14)
+  lastupdt=$4
+  ;;
+*)
+  echo "Invalid lastseen value."
+  exit 1
+  ;;
+esac
+
+if [[ -z $5 ]]
 then
 	filter=""
 else
@@ -56,7 +71,7 @@ fi
 rm 30DAYSAGO 2>&1 >/dev/null
 
 line=""
-line=$(grep ^"$zip" zip_code_database.csv)
+line=$(grep -m 1 ^"$zip" zip_code_database.csv)
 
 if [ "${line}" == "" ]
 then
@@ -66,24 +81,29 @@ fi
 
 #use csvtool for csv processing
 IFS=' '
-set -- $(grep $zip zip_code_database.csv | csvtool col 10,11 - | awk -F, '{print $1 " " $2}')
+set -- $(grep -m 1 $zip zip_code_database.csv | csvtool col 10,11 - | awk -F, '{print $1 " " $2}')
 lat=$1 long=$2
-
-#lat=${array[9]}
-#long=${array[10]}
-
-echo
-echo "Zip:$zip"
-echo "Lat:$lat"
-echo "Long:$long"
-echo "Variance:$var"
 
 latrange1=$(echo "$lat-$var" | bc)
 latrange2=$(echo "$lat+$var" | bc)
 longrange1=$(echo "$long-$var" | bc)
 longrange2=$(echo "$long+$var" | bc)
 
+echo
+echo "$0 processing for:"
+echo "Zip: $zip"
+echo "Lat: $lat"
+echo "Long: $long"
+echo "Variance: $var"
 echo "Calculated range: ($latrange1,$longrange1) to ($latrange2,$longrange2)"
+echo "Lastseen: $lastupdt"
+if [ $filter ]
+then
+	echo "Filter: $filter"
+else
+	echo "No filter."
+fi
+
 
 function populateKMLfolder () {
 	enc=$1

@@ -33,12 +33,27 @@ then
 	exit 1
 fi
 
-
 username=$1
 zip=$2
 var=$3
-lastupdt=$4
-if [[ -z $1 ]]
+
+case ${#4} in
+4)
+  lastupdt=$4"0101000000"
+  ;;
+8)
+  lastupdt=$4"000000"
+  ;;
+14)
+  lastupdt=$4
+  ;;
+*)
+  echo "Invalid lastseen value."
+  exit 1
+  ;;
+esac
+
+if [[ -z $5 ]]
 then
 	filter=""
 else
@@ -77,21 +92,25 @@ IFS=' '
 set -- $(grep -m 1 ^"$zip" zip_code_database.csv | csvtool col 10,11 - | awk -F, '{print $1 " " $2}')
 lat=$1 long=$2
 
-#lat=${array[9]}
-#long=${array[10]}
-
-echo
-echo "Zip:$zip"
-echo "Lat:$lat"
-echo "Long:$long"
-echo "Variance:$var"
-
 latrange1=$(echo "$lat-$var" | bc)
 latrange2=$(echo "$lat+$var" | bc)
 longrange1=$(echo "$long-$var" | bc)
 longrange2=$(echo "$long+$var" | bc)
 
+echo
+echo "$0 processing for:"
+echo "Zip: $zip"
+echo "Lat: $lat"
+echo "Long: $long"
+echo "Variance: $var"
 echo "Calculated range: ($latrange1,$longrange1) to ($latrange2,$longrange2)"
+echo "Lastseen: $lastupdt"
+if [ $filter ]
+then
+	echo "Filter: $filter"
+else
+	echo "No filter."
+fi
 
 function populateKMLfolder () {
 	enc=$1
@@ -174,7 +193,6 @@ function populateKMLfolder () {
 
 	echo "</Folder>" >> "$zip".kml
 } ##END function
-
 
 echo
 read -s -p "Password for WiGLE.net user $username:" password

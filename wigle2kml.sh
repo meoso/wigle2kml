@@ -16,11 +16,11 @@ if [ $# -lt 4 ] ; then
 	echo "Parameters"
 	echo "zipcode: required ; 5-digit U.S. postal-code only ; uses this to parse data from zip_code_database.csv"
 	echo "variance: required ; small decimal number (0.01 to 0.2); example 0.03"
-	echo "lastseen: required ; in the form of YYYY[MMDD[HHMMSS]]; example 2015 or 20140101 or 20140731235959"
+	echo "lastseen: required ; in the form of YYYY[MMDD[HHMMSS]]; example 2015 or 20150701 or 20141231235959"
 	echo "filter: optional ; however, quotes (\"\") are required around filter list; passed verbatim to egrep, so -v is inverse"
 	echo
-	echo "example usage: $0 irongeek 47150 0.03 2015 \"linksys\""
-	echo "example usage: $0 irongeek 47150 0.03 20140731000000 \"-v MIFI|HP-Print|2WIRE\""
+	echo "example usage: $0 irongeek 47150 0.03 20150101 \"[Ll]inksys\""
+	echo "example usage: $0 irongeek 47150 0.03 20141231235959 \"-v MIFI|HP-Print|2WIRE\""
 	echo
 	exit 1
 fi

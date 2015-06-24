@@ -117,7 +117,7 @@ function populateKMLfolder () {
 			;;
 		*)
 			iconwep="https://dl.dropboxusercontent.com/u/7346386/wifi/unknown.png"
-			label_color="ffFFFFFF" #white #alpha/B/G/R
+			label_color="ffFF0099" #purple #alpha/B/G/R
 	esac
 
 	echo "<Folder><name>$folder</name><open>0</open>" >> "$zip".kml

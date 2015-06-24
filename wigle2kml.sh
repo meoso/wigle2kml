@@ -9,18 +9,18 @@ if [ $# -lt 4 ] ; then
 	echo
 	echo "Outputs: zip.txt and zip.kml files"
 	echo
-	echo "Dependencies: csvtool, curl, bc, grep, egrep, WiGLE.net account"
+	echo "Dependencies: csvtool, curl, bc, grep, egrep, tr, WiGLE.net account"
 	echo "Automatically downloads http://www.unitedstateszipcodes.org/zip_code_database.csv"
 	echo "Using api reference: http://www5.musatcha.com/musatcha/computers/wigleapi.htm"
 	echo
 	echo "Parameters"
 	echo "zipcode: required ; 5-digit U.S. postal-code only ; uses this to parse data from zip_code_database.csv"
 	echo "variance: required ; small decimal number (0.01 to 0.2); example 0.03"
-	echo "lastseen: required ; in the form of YYYYMMDDHHMMSS; example 20140101000000"
+	echo "lastseen: required ; in the form of YYYY[MMDD[HHMMSS]]; example 2015 or 20140101 or 20140731235959"
 	echo "filter: optional ; however, quotes (\"\") are required around filter list; passed verbatim to egrep, so -v is inverse"
 	echo
-	echo "example usage: $0 irongeek 47150 0.03 20140101000000 \"linksys\""
-	echo "example usage: $0 irongeek 47150 0.03 20140101000000 \"-v MIFI|HP-Print|2WIRE\""
+	echo "example usage: $0 irongeek 47150 0.03 2015 \"linksys\""
+	echo "example usage: $0 irongeek 47150 0.03 20140731000000 \"-v MIFI|HP-Print|2WIRE\""
 	echo
 	exit 1
 fi
@@ -148,10 +148,11 @@ function populateKMLfolder () {
 	while read line ; do
 		fileline=$((fileline+1)) #debug
 		IFS='~' read -a array <<< "$line"
+		array[0]=$(echo ${array[0]} | tr [a-z] [A-Z]) #to upper case
 		#echo "file-line $fileline: ${array[0]} ${array[1]} ${array[10]}" #debug
 
 		#find MAC vendor
-		lookup=$(echo $array[0] | awk -F":" '{print $1 $2 $3}')
+		lookup=$(echo ${array[0]} | awk -F":" '{print $1 $2 $3}')
 		vendor=$(grep -m 1 ^"$lookup" oui.txt | awk -F':' '{print $2}')
 
 		if [[ "${#array[@]}" -eq "18" ]] && [[ "${array[10]}" == "$enc" ]]  #needed == instead of -eq due: syntax error: operand expected (error token is "?")
@@ -160,7 +161,7 @@ function populateKMLfolder () {
 			echo "	<description>" >> "$zip".kml
 			echo "		<![CDATA[" >> "$zip".kml
 			echo "			BSSID: ${array[1]} <BR>" >> "$zip".kml
-			echo "			SSID: $array[0] <BR>" >> "$zip".kml
+			echo "			SSID: ${array[0]} <BR>" >> "$zip".kml
 			echo "			VENDOR: ${vendor} <BR>" >> "$zip".kml
 			echo "			TYPE: ${array[4]} <BR>" >> "$zip".kml
 			echo "			ENCRYPTION: ${array[10]} <BR>" >> "$zip".kml

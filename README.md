@@ -8,7 +8,7 @@ Usage: `./wigle2kml.sh username zipcode variance lastseen ["[-v] filter[|filter[
 
 Outputs: zip.txt and zip.kml files
 
-Dependencies: `csvtool`, `curl`, `bc`, `grep`, `egrep`, `awk`, WiGLE.net account.
+Dependencies: `csvtool`, `curl`, `bc`, `grep`, `egrep`, `awk`, `tr`, WiGLE.net account.
 
 Automatically downloads http://www.unitedstateszipcodes.org/zip_code_database.csv.  I chose this database because my zipcode had an accurate lat/long as opposed to other databases found.
 
@@ -17,11 +17,11 @@ Using api reference: http://www5.musatcha.com/musatcha/computers/wigleapi.htm ; 
 Parameters:
 zipcode: required ; 5-digit U.S. postal-code only ; uses this to parse data from zip_code_database.csv
 variance: required ; small decimal number (0.01 to 0.2); example 0.03
-lastseen: required ; in the form of YYYYMMDDHHMMSS; example 20140101000000
+lastseen: required ; in the form of YYYY[MMDD[HHMMSS]]; example 2015 or 20140101 or 20140731235959
 filter: optional ; however, quotes ("") are required around filter list; passed verbatim to egrep, so `-v` is inverse
 
-example usage: `./wigle2kml.sh irongeek 47150 0.03 20140101000000 "linksys"`
-example usage: `./wigle2kml.sh irongeek 47150 0.03 20140101000000 "-v MIFI|HP-Print|2WIRE"`
+example usage: `./wigle2kml.sh irongeek 47150 0.03 2015 "linksys"`
+example usage: `./wigle2kml.sh irongeek 47150 0.03 20140731000000 "-v MIFI|HP-Print|2WIRE"`
 
 
 ---

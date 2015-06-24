@@ -25,7 +25,6 @@ if [ $# -lt 4 ] ; then
 	exit 1
 fi
 
-
 if ! ( which csvtool 2>&1 >/dev/null )
 then
 	echo "Please install \"csvtool\" from your distribution repository. Aborted."

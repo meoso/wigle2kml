@@ -35,7 +35,6 @@ fi
 username=$1
 zip=$2
 var=$3
-lastupdt=$4
 
 case ${#4} in
 4)

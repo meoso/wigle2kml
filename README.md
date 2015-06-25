@@ -1,4 +1,5 @@
 changelog 2015-06-22: changed csv handling; please install csvtool and remove ./NEW_ZIP.csv
+
 changleog 2015-06-25: added MAC Vendor lookup; this significantly increases processing time - If you do not want this feature stay at commit d873cd0
 
 ---

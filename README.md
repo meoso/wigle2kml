@@ -36,7 +36,7 @@ example usage: `./wigle2kml.sh irongeek 47150 0.03 20140731000000 "-v MIFI|HP-Pr
 ---
 
 
-:octocat: filter-existing.sh - Filter existing zip.txt file locally. -- OUT OF DATE as compared to ./wigle2kml.sh -- I'm considering adding `getopts` to ./wigle2kml to avoid this file altogether.
+:octocat: filter-existing.sh - Filter existing zip.txt file locally. -- OUT OF DATE as compared to ./wigle2kml.sh -- I'm considering adding `getopts` to ./wigle2kml.sh to avoid this file altogether.
 
 Usage: `./filter-existing.sh zip ["[-v] filter[|filter[|filter]]"]`
 

@@ -9,7 +9,7 @@ if [ $# -lt 4 ] ; then
 	echo
 	echo "Outputs: zip.txt and zip.kml files"
 	echo
-	echo "Dependencies: csvtool, curl, bc, grep, egrep, WiGLE.net account"
+	echo "Dependencies: csvtool, curl, bc, grep, egrep, tr, WiGLE.net account"
 	echo "Automatically downloads http://www.unitedstateszipcodes.org/zip_code_database.csv"
 	echo "Using api reference: http://www5.musatcha.com/musatcha/computers/wigleapi.htm"
 	echo
@@ -67,6 +67,14 @@ then
 	curl -O http://www.unitedstateszipcodes.org/zip_code_database.csv
 fi
 
+if ! [ -f oui.txt ] || [ oui.txt -ot 30DAYSAGO ]
+then
+	echo "Downloading IEEE MA-L MAC address oui.txt"
+	curl -O http://standards-oui.ieee.org/oui.txt
+	cat oui.txt | grep -F "(base 16)" | awk '{$2=$3="" ; print $0}' | awk -F"   " '{print $1 ":" $2}' > tempOUI
+	mv tempOUI oui.txt
+fi
+
 rm 30DAYSAGO 2>&1 >/dev/null
 
 line=""
@@ -80,7 +88,11 @@ fi
 
 #use csvtool for csv processing
 IFS=' '
+<<<<<<< HEAD
 set -- $(grep -m 1 $zip zip_code_database.csv | csvtool col 10,11 - | awk -F, '{print $1 " " $2}')
+=======
+set -- $(grep -m 1 ^"$zip" zip_code_database.csv | csvtool col 10,11 - | awk -F, '{print $1 " " $2}')
+>>>>>>> develop
 lat=$1 long=$2
 
 latrange1=$(echo "$lat-$var" | bc)
@@ -102,7 +114,10 @@ then
 else
 	echo "No filter."
 fi
+<<<<<<< HEAD
 
+=======
+>>>>>>> develop
 
 function populateKMLfolder () {
 	enc=$1
@@ -140,7 +155,12 @@ function populateKMLfolder () {
 	while read line ; do
 		fileline=$((fileline+1)) #debug
 		IFS='~' read -a array <<< "$line"
+		array[0]=${array[0]^^} #to upper case
 		#echo "file-line $fileline: ${array[0]} ${array[1]} ${array[10]}" #debug
+
+		#find MAC vendor
+		lookup=$(echo ${array[0]} | awk -F":" '{print $1 $2 $3}')
+		vendor=$(grep -m 1 ^"$lookup" oui.txt | awk -F':' '{print $2}')
 
 		if [[ "${#array[@]}" -eq "18" ]] && [[ "${array[10]}" == "$enc" ]]  #needed == instead of -eq due: syntax error: operand expected (error token is "?")
 		then
@@ -149,13 +169,29 @@ function populateKMLfolder () {
 			echo "		<![CDATA[" >> "$zip".kml
 			echo "			SSID: ${array[1]} <BR>" >> "$zip".kml
 			echo "			MAC: ${array[0]} <BR>" >> "$zip".kml
+<<<<<<< HEAD
 			echo "			TYPE: ${array[4]} <BR>" >> "$zip".kml
 			echo "			ENCRYPTION: ${array[10]} <BR>" >> "$zip".kml
 			echo "			CHANNEL: ${array[14]} <BR>" >> "$zip".kml
+=======
+			if [ "${array[2]}" != " " ] ; then echo "			Comment: ${array[2]} <BR>" >> "$zip".kml ; fi
+			if [ "${array[3]}" != " " ] ; then echo "			Name: ${array[3]} <BR>" >> "$zip".kml ; fi
+			echo "			Vendor: ${vendor} <BR>" >> "$zip".kml
+			echo "			Type: ${array[4]} <BR>" >> "$zip".kml
+			if [ "${array[5]}" != "?" ] ; then echo "			Freenet: Y <BR>" >> "$zip".kml ; fi
+			if [ "${array[6]}" != "?" ] ; then echo "			Paynet: Y <BR>" >> "$zip".kml ; fi
+			echo "			Encryption: ${array[10]} <BR>" >> "$zip".kml
+			echo "			Channel: ${array[14]} <BR>" >> "$zip".kml
+>>>>>>> develop
 			echo "			QOS: ${array[16]} <BR>" >> "$zip".kml
-			echo "			Last Seen: ${array[13]} <BR>" >> "$zip".kml
+			if [ "${array[9]}" != " " ] ; then echo "			Flags: ${array[9]} <BR>" >> "$zip".kml ; fi
+			echo "			First Seen: $(echo ${array[7]} | sed s/[:-]//g ) <BR>" >> "$zip".kml
+			if [ "${array[8]}" != " " ] ; then echo "			Last Seen: ${array[8]} <BR>" >> "$zip".kml ; fi
+			echo "			Last Update: ${array[13]} <BR>" >> "$zip".kml
 			echo "			Latitude: ${array[11]} <BR>" >> "$zip".kml
 			echo "			Longitude: ${array[12]} <BR>" >> "$zip".kml
+			if [ "${array[15]}" != " " ] ; then echo "			BCN Interval: ${array[15]} <BR>" >> "$zip".kml ; fi
+			echo "			Userfound: ${array[17]} <BR>" >> "$zip".kml
 			echo "		]]>" >> "$zip".kml
 			echo "	</description>" >> "$zip".kml
 			echo "	<name><![CDATA[${array[1]}]]></name>" >> "$zip".kml
@@ -180,7 +216,6 @@ function populateKMLfolder () {
 
 	echo "</Folder>" >> "$zip".kml
 } ##END function
-
 
 echo
 read -s -p "Password for WiGLE.net user $username:" password

@@ -205,7 +205,7 @@ then
 	echo
 
 	#open new kml
-	echo '<?xml version="1.0" encoding="UTF-8"?><kml xmlns="http://earth.google.com/kml/2.0"><Folder><name>WiGLE Data</name><open>1</open>' > "$zip".kml
+	echo '<?xml version="1.0" encoding="UTF-8"?><kml xmlns="http://earth.google.com/kml/2.0"><Folder><name>'${zip}' WiGLE Data</name><open>1</open>' > "$zip".kml
 
 	populateKMLfolder "N" "Open"
 	populateKMLfolder "Y" "WEP"

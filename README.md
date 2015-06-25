@@ -36,7 +36,7 @@ example usage: `./wigle2kml.sh irongeek 47150 0.03 20140731000000 "-v MIFI|HP-Pr
 ---
 
 
-:octocat: filter-existing.sh - Filter existing zip.txt file locally.
+:octocat: filter-existing.sh - Filter existing zip.txt file locally. -- OUT OF DATE as compared to ./wigle2kml.sh -- I'm considering adding `getopts` to ./wigle2kml to avoid this file altogether.
 
 Usage: `./filter-existing.sh zip ["[-v] filter[|filter[|filter]]"]`
 
@@ -46,7 +46,7 @@ Dependencies: `egrep`
 
 Parameters:
 zip - required ; 5-digit U.S. postal-code only ; reads local zip.txt file
-filter - optional ; however, quotes ("") are required around filter list; passed verbatim to egrep, so -v is inverse
+filter - optional ; however, quotes ("") should be used around filter list as it is passed verbatim to egrep (`-v` is inverse)
 
-example usage: `./filter-existing.sh 47150 "linksys"`
+example usage: `./filter-existing.sh 47150 "[Ll]inksys"`
 example usage: `./filter-existing.sh 47150 "-v MIFI|HP-Print|2WIRE"`

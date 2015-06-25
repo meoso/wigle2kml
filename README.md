@@ -9,7 +9,7 @@ Usage: `./wigle2kml.sh username zipcode variance lastseen ["[-v] filter[|filter[
 
 Outputs: zip.txt and zip.kml files
 
-Dependencies: `csvtool`, `curl`, `bc`, `grep`, `egrep`, `awk`, `tr`, WiGLE.net account.
+Dependencies: `csvtool`, `curl`, `bc`, `grep`, `egrep`, `awk`, WiGLE.net account.
 
 Automatically downloads http://www.unitedstateszipcodes.org/zip_code_database.csv.  I chose this database because my zipcode had an accurate lat/long as opposed to other databases found.
 

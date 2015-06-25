@@ -11,7 +11,8 @@ if [ $# -lt 4 ] ; then
 	echo
 	echo "Dependencies: csvtool, curl, bc, grep, egrep, tr, WiGLE.net account"
 	echo "Automatically downloads http://www.unitedstateszipcodes.org/zip_code_database.csv"
-	echo "Using api reference: http://www5.musatcha.com/musatcha/computers/wigleapi.htm"
+	echo "Automatically downloads http://standards-oui.ieee.org/oui.txt"
+	echo "Using API reference: http://www5.musatcha.com/musatcha/computers/wigleapi.htm"
 	echo
 	echo "Parameters"
 	echo "zipcode: required ; 5-digit U.S. postal-code only ; uses this to parse data from zip_code_database.csv"

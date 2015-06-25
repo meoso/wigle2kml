@@ -18,7 +18,7 @@ if [ $# -lt 4 ] ; then
 	echo "zipcode: required ; 5-digit U.S. postal-code only ; uses this to parse data from zip_code_database.csv"
 	echo "variance: required ; small decimal number (0.01 to 0.2); example 0.03"
 	echo "lastseen: required ; in the form of YYYY[MMDD[HHMMSS]]; example 2015 or 20150701 or 20141231235959"
-	echo "filter: optional ; however, quotes (\"\") are required around filter list; passed verbatim to egrep, so -v is inverse"
+	echo "filter: optional ; however, quotes (\"\") should be used around filter list as it is passed verbatim to egrep. (-v is inverse)"
 	echo
 	echo "example usage: $0 irongeek 47150 0.03 20150101 \"[Ll]inksys\""
 	echo "example usage: $0 irongeek 47150 0.03 20141231235959 \"-v MIFI|HP-Print|2WIRE\""
@@ -89,11 +89,7 @@ fi
 
 #use csvtool for csv processing
 IFS=' '
-<<<<<<< HEAD
-set -- $(grep -m 1 $zip zip_code_database.csv | csvtool col 10,11 - | awk -F, '{print $1 " " $2}')
-=======
 set -- $(grep -m 1 ^"$zip" zip_code_database.csv | csvtool col 10,11 - | awk -F, '{print $1 " " $2}')
->>>>>>> develop
 lat=$1 long=$2
 
 latrange1=$(echo "$lat-$var" | bc)
@@ -115,10 +111,6 @@ then
 else
 	echo "No filter."
 fi
-<<<<<<< HEAD
-
-=======
->>>>>>> develop
 
 function populateKMLfolder () {
 	enc=$1
@@ -170,11 +162,6 @@ function populateKMLfolder () {
 			echo "		<![CDATA[" >> "$zip".kml
 			echo "			SSID: ${array[1]} <BR>" >> "$zip".kml
 			echo "			MAC: ${array[0]} <BR>" >> "$zip".kml
-<<<<<<< HEAD
-			echo "			TYPE: ${array[4]} <BR>" >> "$zip".kml
-			echo "			ENCRYPTION: ${array[10]} <BR>" >> "$zip".kml
-			echo "			CHANNEL: ${array[14]} <BR>" >> "$zip".kml
-=======
 			if [ "${array[2]}" != " " ] ; then echo "			Comment: ${array[2]} <BR>" >> "$zip".kml ; fi
 			if [ "${array[3]}" != " " ] ; then echo "			Name: ${array[3]} <BR>" >> "$zip".kml ; fi
 			echo "			Vendor: ${vendor} <BR>" >> "$zip".kml
@@ -183,7 +170,6 @@ function populateKMLfolder () {
 			if [ "${array[6]}" != "?" ] ; then echo "			Paynet: Y <BR>" >> "$zip".kml ; fi
 			echo "			Encryption: ${array[10]} <BR>" >> "$zip".kml
 			echo "			Channel: ${array[14]} <BR>" >> "$zip".kml
->>>>>>> develop
 			echo "			QOS: ${array[16]} <BR>" >> "$zip".kml
 			if [ "${array[9]}" != " " ] ; then echo "			Flags: ${array[9]} <BR>" >> "$zip".kml ; fi
 			echo "			First Seen: $(echo ${array[7]} | sed s/[:-]//g ) <BR>" >> "$zip".kml

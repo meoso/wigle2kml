@@ -174,10 +174,10 @@ function populateKMLfolder () {
 			if [ "${array[9]}" != " " ] ; then echo "			Flags: ${array[9]} <BR>" >> "$zip".kml ; fi
 			echo "			First Seen: $(echo ${array[7]} | sed s/[:-]//g ) <BR>" >> "$zip".kml
 			if [ "${array[8]}" != " " ] ; then echo "			Last Seen: ${array[8]} <BR>" >> "$zip".kml ; fi
-			echo "			Last Update: ${array[13]} <BR>" >> "$zip".kml
+			echo "			Last Update: ${array[13]:0:8} ${array[13]:8:6} <BR>" >> "$zip".kml
 			echo "			Latitude: ${array[11]} <BR>" >> "$zip".kml
 			echo "			Longitude: ${array[12]} <BR>" >> "$zip".kml
-			if [ "${array[15]}" != " " ] ; then echo "			BCN Interval: ${array[15]} <BR>" >> "$zip".kml ; fi
+			if [ "${array[15]}" != " " ] ; then echo "			Beacon Interval: ${array[15]}ms <BR>" >> "$zip".kml ; fi
 			echo "			Userfound: ${array[17]} <BR>" >> "$zip".kml
 			echo "		]]>" >> "$zip".kml
 			echo "	</description>" >> "$zip".kml

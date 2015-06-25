@@ -14,14 +14,18 @@ Dependencies: `csvtool`, `curl`, `bc`, `grep`, `egrep`, `awk`, WiGLE.net account
 
 Automatically downloads http://www.unitedstateszipcodes.org/zip_code_database.csv if nonexistent or older than 30 days.  I chose this database because my zipcode had an accurate lat/long as opposed to other databases found.
 
-Automatically downloads http://standards-oui.ieee.org/oui.txt if nonexistent or older than 30 days.  Using IEEE MA-L MAC address oui.txt for Vendor lookup.
+Automatically downloads http://standards-oui.ieee.org/oui.txt if nonexistent or older than 30 days.  Using IEEE MA-L MAC address oui.txt for vendor lookup.
 
 Using api reference: http://www5.musatcha.com/musatcha/computers/wigleapi.htm ; however, not using the `pagestart` variable as it seems not to be limited to 1000 records as stated, but rather seems to be an undocumented 11k records.  Also, this API is slightly stale and thus the wigle.net output is now 18 columns.
 
 Parameters:
+
 zipcode: required ; 5-digit U.S. postal-code only ; uses this to parse data from zip_code_database.csv
+
 variance: required ; small decimal number (0.01 to 0.2); example 0.03
+
 lastseen: required ; in the form of YYYY[MMDD[HHMMSS]]; example 2015 or 20150701 or 20141231235959
+
 filter: optional ; however, quotes ("") should be used around filter list as it is passed verbatim to egrep (`-v` is inverse)
 
 example usage: `./wigle2kml.sh irongeek 47150 0.03 2015 "[Ll]inksys"`

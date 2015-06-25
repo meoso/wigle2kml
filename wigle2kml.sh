@@ -147,8 +147,8 @@ function populateKMLfolder () {
 			echo "<Placemark>" >> "$zip".kml
 			echo "	<description>" >> "$zip".kml
 			echo "		<![CDATA[" >> "$zip".kml
-			echo "			SSID: $array[0] <BR>" >> "$zip".kml
-			echo "			BSSID: ${array[1]} <BR>" >> "$zip".kml
+			echo "			SSID: ${array[1]} <BR>" >> "$zip".kml
+			echo "			MAC: ${array[0]} <BR>" >> "$zip".kml
 			echo "			TYPE: ${array[4]} <BR>" >> "$zip".kml
 			echo "			ENCRYPTION: ${array[10]} <BR>" >> "$zip".kml
 			echo "			CHANNEL: ${array[14]} <BR>" >> "$zip".kml

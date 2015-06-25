@@ -159,16 +159,25 @@ function populateKMLfolder () {
 			echo "<Placemark>" >> "$zip".kml
 			echo "	<description>" >> "$zip".kml
 			echo "		<![CDATA[" >> "$zip".kml
-			echo "			BSSID: ${array[1]} <BR>" >> "$zip".kml
-			echo "			SSID: ${array[0]} <BR>" >> "$zip".kml
-			echo "			VENDOR: ${vendor} <BR>" >> "$zip".kml
-			echo "			TYPE: ${array[4]} <BR>" >> "$zip".kml
-			echo "			ENCRYPTION: ${array[10]} <BR>" >> "$zip".kml
-			echo "			CHANNEL: ${array[14]} <BR>" >> "$zip".kml
+			echo "			SSID: ${array[1]} <BR>" >> "$zip".kml
+			echo "			MAC: ${array[0]} <BR>" >> "$zip".kml
+			if [ "${array[2]}" != " " ] ; then echo "			Comment: ${array[2]} <BR>" >> "$zip".kml ; fi
+			if [ "${array[3]}" != " " ] ; then echo "			Name: ${array[3]} <BR>" >> "$zip".kml ; fi
+			echo "			Vendor: ${vendor} <BR>" >> "$zip".kml
+			echo "			Type: ${array[4]} <BR>" >> "$zip".kml
+			if [ "${array[5]}" != "?" ] ; then echo "			Freenet: Y <BR>" >> "$zip".kml ; fi
+			if [ "${array[6]}" != "?" ] ; then echo "			Paynet: Y <BR>" >> "$zip".kml ; fi
+			echo "			Encryption: ${array[10]} <BR>" >> "$zip".kml
+			echo "			Channel: ${array[14]} <BR>" >> "$zip".kml
 			echo "			QOS: ${array[16]} <BR>" >> "$zip".kml
-			echo "			Last Seen: ${array[13]} <BR>" >> "$zip".kml
+			if [ "${array[9]}" != " " ] ; then echo "			Flags: ${array[9]} <BR>" >> "$zip".kml ; fi
+			echo "			First Seen: $(echo ${array[7]} | sed s/[:-]//g ) <BR>" >> "$zip".kml
+			if [ "${array[8]}" != " " ] ; then echo "			Last Seen: ${array[8]} <BR>" >> "$zip".kml ; fi
+			echo "			Last Update: ${array[13]} <BR>" >> "$zip".kml
 			echo "			Latitude: ${array[11]} <BR>" >> "$zip".kml
 			echo "			Longitude: ${array[12]} <BR>" >> "$zip".kml
+			if [ "${array[15]}" != " " ] ; then echo "			BCN Interval: ${array[15]} <BR>" >> "$zip".kml ; fi
+			echo "			Userfound: ${array[17]} <BR>" >> "$zip".kml
 			echo "		]]>" >> "$zip".kml
 			echo "	</description>" >> "$zip".kml
 			echo "	<name><![CDATA[${array[1]}]]></name>" >> "$zip".kml

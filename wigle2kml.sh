@@ -147,7 +147,7 @@ function populateKMLfolder () {
 	while read line ; do
 		fileline=$((fileline+1)) #debug
 		IFS='~' read -a array <<< "$line"
-		array[0]=$(echo ${array[0]} | tr [a-z] [A-Z]) #to upper case
+		array[0]=${array[0]^^} #to upper case
 		#echo "file-line $fileline: ${array[0]} ${array[1]} ${array[10]}" #debug
 
 		#find MAC vendor
@@ -217,7 +217,7 @@ then
 	echo
 
 	#open new kml
-	echo '<?xml version="1.0" encoding="UTF-8"?><kml xmlns="http://earth.google.com/kml/2.0"><Folder><name>WiGLE Data</name><open>1</open>' > "$zip".kml
+	echo '<?xml version="1.0" encoding="UTF-8"?><kml xmlns="http://earth.google.com/kml/2.0"><Folder><name>'${zip}' WiGLE Data</name><open>1</open>' > "$zip".kml
 
 	populateKMLfolder "N" "Open"
 	populateKMLfolder "Y" "WEP"

@@ -49,4 +49,5 @@ zip - required ; 5-digit U.S. postal-code only ; reads local zip.txt file
 filter - optional ; however, quotes ("") should be used around filter list as it is passed verbatim to egrep (`-v` is inverse)
 
 example usage: `./filter-existing.sh 47150 "[Ll]inksys"`
+
 example usage: `./filter-existing.sh 47150 "-v MIFI|HP-Print|2WIRE"`

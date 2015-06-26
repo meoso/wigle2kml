@@ -9,7 +9,7 @@ if [ $# -lt 4 ] ; then
 	echo
 	echo "Outputs: zip.txt and zip.kml files"
 	echo
-	echo "Dependencies: csvtool, curl, bc, grep, egrep, tr, WiGLE.net account"
+	echo "Dependencies: csvtool, curl, bc, grep, egrep, awk, WiGLE.net account"
 	echo "Automatically downloads http://www.unitedstateszipcodes.org/zip_code_database.csv"
 	echo "Automatically downloads http://standards-oui.ieee.org/oui.txt"
 	echo "Using API reference: http://www5.musatcha.com/musatcha/computers/wigleapi.htm"
@@ -64,13 +64,13 @@ touch -d "$(date -d '30 days ago')" 30DAYSAGO
 
 if ! [ -f zip_code_database.csv ] || [ zip_code_database.csv -ot 30DAYSAGO ]
 then
-	echo Downloading zip_code_database.csv
+	echo "Downloading Zip-Code database."
 	curl -O http://www.unitedstateszipcodes.org/zip_code_database.csv
 fi
 
 if ! [ -f oui.txt ] || [ oui.txt -ot 30DAYSAGO ]
 then
-	echo "Downloading IEEE MA-L MAC address oui.txt"
+	echo "Downloading IEEE MA-L (MAC Vendors)."
 	curl -O http://standards-oui.ieee.org/oui.txt
 	cat oui.txt | grep -F "(base 16)" | awk '{$2=$3="" ; print $0}' | awk -F"   " '{print $1 ":" $2}' > tempOUI
 	mv tempOUI oui.txt
@@ -206,6 +206,7 @@ function populateKMLfolder () {
 
 echo
 read -s -p "Password for WiGLE.net user $username:" password
+echo ""
 
 #successful login will result in 302
 result=$(curl -s -c cookie.txt -d "credential_0=$username&credential_1=$password&noexpire=off" https://wigle.net/gps/gps/GPSDB/login/ | grep 302)
@@ -213,7 +214,7 @@ result=$(curl -s -c cookie.txt -d "credential_0=$username&credential_1=$password
 # if no error (if successful 302)
 if [[ $? == 0 ]]
 then
-	echo "Downloading data:"
+	echo "Downloading WiGLE data:"
 	curl -b cookie.txt -o "$zip".txt "https://wigle.net/gpsopen/gps/GPSDB/confirmquery?longrange1=$longrange1&longrange2=$longrange2&latrange1=$latrange1&latrange2=$latrange2&simple=true&lastupdt=$lastupdt"
 
 	# apply filter if one was provided (ignorant of fields -- whole-line filtering)

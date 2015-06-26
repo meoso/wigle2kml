@@ -14,7 +14,7 @@ Dependencies: `csvtool`, `curl`, `bc`, `grep`, `egrep`, `awk`, WiGLE.net account
 
 Automatically downloads http://www.unitedstateszipcodes.org/zip_code_database.csv if nonexistent or older than 30 days.  I chose this database because my zipcode had an accurate lat/long as opposed to other databases found.
 
-Automatically downloads http://standards-oui.ieee.org/oui.txt if nonexistent or older than 30 days.  Using IEEE MA-L MAC address oui.txt for vendor lookup.
+Automatically downloads http://standards-oui.ieee.org/oui.txt if nonexistent or older than 30 days.  Using IEEE MA-L oui.txt for vendor lookup.
 
 Using api reference: http://www5.musatcha.com/musatcha/computers/wigleapi.htm ; however, not using the `pagestart` variable as it seems not to be limited to 1000 records as stated, but rather seems to be an undocumented 11k records.  Also, this API is slightly stale and thus the wigle.net output is now 18 columns.
 

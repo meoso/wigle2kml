@@ -215,7 +215,9 @@ result=$(curl -s -c cookie.txt -d "credential_0=$username&credential_1=$password
 if [[ $? == 0 ]]
 then
 	echo "Downloading WiGLE data:"
-	curl -b cookie.txt -o "$zip".txt "https://wigle.net/gpsopen/gps/GPSDB/confirmquery?longrange1=$longrange1&longrange2=$longrange2&latrange1=$latrange1&latrange2=$latrange2&simple=true&lastupdt=$lastupdt"
+	#curl -b cookie.txt -o "$zip".txt "https://wigle.net/gpsopen/gps/GPSDB/confirmquery?longrange1=$longrange1&longrange2=$longrange2&latrange1=$latrange1&latrange2=$latrange2&simple=true&lastupdt=$lastupdt"
+	#URL changed:
+	curl -b cookie.txt -o "$zip".txt "https://wigle.net/gps/gps/main/confirmquery?longrange1=$longrange1&longrange2=$longrange2&latrange1=$latrange1&latrange2=$latrange2&simple=true&lastupdt=$lastupdt"
 
 	# apply filter if one was provided (ignorant of fields -- whole-line filtering)
 	if ! [[ -z $filter ]]

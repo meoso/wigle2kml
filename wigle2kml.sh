@@ -65,13 +65,13 @@ touch -d "$(date -d '30 days ago')" 30DAYSAGO
 if ! [ -f zip_code_database.csv ] || [ zip_code_database.csv -ot 30DAYSAGO ]
 then
 	echo "Downloading Zip-Code database."
-	curl -O http://www.unitedstateszipcodes.org/zip_code_database.csv
+	curl -# --compressed -O http://www.unitedstateszipcodes.org/zip_code_database.csv
 fi
 
 if ! [ -f oui.txt ] || [ oui.txt -ot 30DAYSAGO ]
 then
 	echo "Downloading IEEE MA-L (MAC Vendors)."
-	curl -O http://standards-oui.ieee.org/oui.txt
+	curl -# --compressed -O http://standards-oui.ieee.org/oui.txt
 	cat oui.txt | grep -F "(base 16)" | awk '{$2=$3="" ; print $0}' | awk -F"   " '{print $1 ":" $2}' > tempOUI
 	mv tempOUI oui.txt
 fi

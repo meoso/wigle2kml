@@ -3,9 +3,9 @@
 #Check for at least 4 arguments
 if [ $# -lt 4 ] ; then
 	echo
-	echo "$0 - The WiGLE.net to KML converter in BASH - by NJD - Inspired by irongeek.com's igigle.exe"
+	echo "${0##*/} - The WiGLE.net to KML converter in BASH - by NJD - Inspired by Irongeek.com's igigle.exe"
 	echo
-	echo "Usage: $0 username zipcode variance lastseen [\"[-v] filter[|filter[|filter]]\"]"
+	echo "Usage: ${0##*/} username zipcode variance lastseen [\"[-v] filter[|filter[|filter]]\"]"
 	echo
 	echo "Outputs: zip.txt and zip.kml files"
 	echo
@@ -20,8 +20,8 @@ if [ $# -lt 4 ] ; then
 	echo "lastseen: required ; in the form of YYYY[MMDD[HHMMSS]]; example 2015 or 20150701 or 20141231235959"
 	echo "filter: optional ; however, quotes (\"\") should be used around filter list as it is passed verbatim to egrep. (-v is inverse)"
 	echo
-	echo "example usage: $0 irongeek 47150 0.03 20150101 \"[Ll]inksys\""
-	echo "example usage: $0 irongeek 47150 0.03 20141231235959 \"-v MIFI|HP-Print|2WIRE\""
+	echo "example usage: ${0##*/} irongeek 47150 0.03 20150101 \"[Ll]inksys\""
+	echo "example usage: ${0##*/} irongeek 47150 0.03 20141231235959 \"-v MIFI|HP-Print|2WIRE\""
 	echo
 	exit 1
 fi

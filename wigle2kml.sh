@@ -89,7 +89,7 @@ fi
 
 #use csvtool for csv processing
 IFS=' '
-set -- $(grep -m 1 ^"$zip" zip_code_database.csv | csvtool col 10,11 - | awk -F, '{print $1 " " $2}')
+set -- $(grep -m 1 ^"$zip" zip_code_database.csv | csvtool col 13,14 - | awk -F, '{print $1 " " $2}')
 lat=$1 long=$2
 
 latrange1=$(echo "$lat-$var" | bc)

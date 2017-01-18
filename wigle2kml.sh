@@ -65,7 +65,7 @@ touch -d "$(date -d '30 days ago')" 30DAYSAGO
 if ! [ -f zip_code_database.csv ] || [ zip_code_database.csv -ot 30DAYSAGO ]
 then
 	echo "Downloading Zip-Code database."
-	curl -# --compressed -O http://www.unitedstateszipcodes.org/zip_code_database.csv
+	curl -# --compressed -o zip_code_database.csv http://federalgovernmentzipcodes.us/free-zipcode-database-Primary.csv
 fi
 
 if ! [ -f oui.txt ] || [ oui.txt -ot 30DAYSAGO ]
@@ -79,7 +79,7 @@ fi
 rm 30DAYSAGO 2>&1 >/dev/null
 
 line=""
-line=$(grep -m 1 ^"$zip" zip_code_database.csv)
+line=$(grep -m 1 ^"\"$zip\"" zip_code_database.csv)
 
 if [ "${line}" == "" ]
 then
@@ -88,8 +88,8 @@ then
 fi
 
 #use csvtool for csv processing
-IFS=' '
-set -- $(grep -m 1 ^"$zip" zip_code_database.csv | csvtool col 13,14 - | awk -F, '{print $1 " " $2}')
+IFS=','
+set -- $(grep -m 1 ^"\"$zip\"" zip_code_database.csv | csvtool col 6,7 - | awk -F, '{print $1 "," $2}')
 lat=$1 long=$2
 
 latrange1=$(echo "$lat-$var" | bc)

@@ -10,16 +10,17 @@ if [ $# -lt 4 ] ; then
 	echo "Outputs: zip.txt and zip.kml files"
 	echo
 	echo "Dependencies: csvtool, curl, bc, grep, egrep, awk, WiGLE.net account"
-	echo "Automatically downloads http://www.unitedstateszipcodes.org/zip_code_database.csv"
+	echo "Automatically downloads http://www.unitedstateszipcodes.org/${zipfile}"
 	echo "Automatically downloads http://standards-oui.ieee.org/oui.txt"
 	echo "Using API reference: http://www5.musatcha.com/musatcha/computers/wigleapi.htm"
 	echo
 	echo "Parameters"
-	echo "zipcode: required ; 5-digit U.S. postal-code only ; uses this to parse data from zip_code_database.csv"
+	echo "zipcode: required ; 5-digit U.S. postal-code only ; uses this to parse data from ${zipfile}"
 	echo "variance: required ; small decimal number (0.01 to 0.2); example 0.03"
 	echo "lastseen: required ; in the form of YYYY[MMDD[HHMMSS]]; example 2015 or 20150701 or 20141231235959"
 	echo "filter: optional ; however, quotes (\"\") should be used around filter list as it is passed verbatim to egrep. (-v is inverse)"
 	echo
+	echo "example usage: ${0##*/} irongeek 47150 0.03 20160701"
 	echo "example usage: ${0##*/} irongeek 47150 0.03 20150101 \"[Ll]inksys\""
 	echo "example usage: ${0##*/} irongeek 47150 0.03 20141231235959 \"-v MIFI|HP-Print|2WIRE\""
 	echo
@@ -62,10 +63,12 @@ fi
 
 touch -d "$(date -d '30 days ago')" 30DAYSAGO
 
-if ! [ -f zip_code_database.csv ] || [ zip_code_database.csv -ot 30DAYSAGO ]
+zipfile="free-zipcode-database-Primary.csv"
+
+if ! [ -f ${zipfile} ] || [ ${zipfile} -ot 30DAYSAGO ]
 then
 	echo "Downloading Zip-Code database."
-	curl -# --compressed -o zip_code_database.csv http://federalgovernmentzipcodes.us/free-zipcode-database-Primary.csv
+	curl -# --compressed -o ${zipfile} http://federalgovernmentzipcodes.us/free-zipcode-database-Primary.csv
 fi
 
 if ! [ -f oui.txt ] || [ oui.txt -ot 30DAYSAGO ]
@@ -79,7 +82,7 @@ fi
 rm 30DAYSAGO 2>&1 >/dev/null
 
 line=""
-line=$(grep -m 1 ^"\"$zip\"" zip_code_database.csv)
+line=$(grep -m 1 ^"\"$zip\"" ${zipfile})
 
 if [ "${line}" == "" ]
 then
@@ -89,7 +92,7 @@ fi
 
 #use csvtool for csv processing
 IFS=','
-set -- $(grep -m 1 ^"\"$zip\"" zip_code_database.csv | csvtool col 6,7 - | awk -F, '{print $1 "," $2}')
+set -- $(grep -m 1 ^"\"$zip\"" ${zipfile} | csvtool col 6,7 - | awk -F, '{print $1 "," $2}')
 lat=$1 long=$2
 
 latrange1=$(echo "$lat-$var" | bc)

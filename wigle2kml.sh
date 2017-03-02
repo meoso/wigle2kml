@@ -121,24 +121,24 @@ function populateKMLfolder () {
 	echo "Processing Enc=$enc ($folder)"
 
  	case $enc in
-		"N")
-			iconwep="https://dl.dropboxusercontent.com/u/7346386/wifi/open.png"
+		"N") #open
+			iconwep="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png"
 			label_color="ff0000FF" #red #alpha/B/G/R
 			;;
-		"Y")
-			iconwep="https://dl.dropboxusercontent.com/u/7346386/wifi/wep.png"
+		"Y") #wep
+			iconwep="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png"
 			label_color="ff00FFFF" #yellow #alpha/B/G/R
 			;;
-		"W")
-			iconwep="https://dl.dropboxusercontent.com/u/7346386/wifi/wpa.png"
+		"W") #wpa
+			iconwep="http://maps.google.com/mapfiles/kml/paddle/ltblu-blank.png"
 			label_color="ffFFFF00" #cyan #alpha/B/G/R
 			;;
-		"2")
-			iconwep="https://dl.dropboxusercontent.com/u/7346386/wifi/wpa2.png"
+		"2") #wpa2
+			iconwep="http://maps.google.com/mapfiles/kml/paddle/blu-blank.png"
 			label_color="ffFF6600" #blue #alpha/B/G/R
 			;;
-		*)
-			iconwep="https://dl.dropboxusercontent.com/u/7346386/wifi/unknown.png"
+		*) #unknown
+			iconwep="http://maps.google.com/mapfiles/kml/paddle/purple-blank.png"
 			label_color="ffFF0099" #purple #alpha/B/G/R
 	esac
 

@@ -108,7 +108,7 @@ echo "Long: $long"
 echo "Variance: $var"
 echo "Calculated range: ($latrange1,$longrange1) to ($latrange2,$longrange2)"
 echo "Lastseen: $lastupdt"
-if [ $filter ]
+if [ "$filter" ]
 then
 	echo "Filter: $filter"
 else
@@ -155,7 +155,7 @@ function populateKMLfolder () {
 		#echo "file-line $fileline: ${array[0]} ${array[1]} ${array[10]}" #debug
 
 		#find MAC vendor
-		lookup=$(echo ${array[0]} | awk -F":" '{print $1 $2 $3}')
+		lookup="$(echo ${array[0]} | awk -F":" '{print $1 $2 $3}')"
 		vendor=$(grep -m 1 ^"$lookup" oui.txt | awk -F':' '{print $2}')
 
 		if [[ "${#array[@]}" -eq "18" ]] && [[ "${array[10]}" == "$enc" ]]  #needed == instead of -eq due: syntax error: operand expected (error token is "?")
@@ -171,7 +171,7 @@ function populateKMLfolder () {
 			echo "			Type: ${array[4]} <BR>" >> "$zip".kml
 			if [ "${array[5]}" != "?" ] ; then echo "			Freenet: Y <BR>" >> "$zip".kml ; fi
 			if [ "${array[6]}" != "?" ] ; then echo "			Paynet: Y <BR>" >> "$zip".kml ; fi
-			echo "			Encryption: ${array[10]} <BR>" >> "$zip".kml
+			echo "			Encryption: ${folder} <BR>" >> "$zip".kml #not really "folder" but quickest way to save readable Encryption type
 			echo "			Channel: ${array[14]} <BR>" >> "$zip".kml
 			echo "			QOS: ${array[16]} <BR>" >> "$zip".kml
 			if [ "${array[9]}" != " " ] ; then echo "			Flags: ${array[9]} <BR>" >> "$zip".kml ; fi
@@ -223,9 +223,9 @@ then
 	curl -b cookie.txt -o "$zip".txt "https://wigle.net/gps/gps/main/confirmquery?longrange1=$longrange1&longrange2=$longrange2&latrange1=$latrange1&latrange2=$latrange2&simple=true&lastupdt=$lastupdt"
 
 	# apply filter if one was provided (ignorant of fields -- whole-line filtering)
-	if ! [[ -z $filter ]]
+	if ! [[ -z "$filter" ]]
 	then
-		egrep $filter "$zip".txt > filter.txt
+		egrep "$filter" "$zip".txt > filter.txt
 		mv filter.txt "$zip".txt
 	fi
 
@@ -233,7 +233,7 @@ then
 	echo
 
 	#open new kml
-	echo '<?xml version="1.0" encoding="UTF-8"?><kml xmlns="http://earth.google.com/kml/2.0"><Folder><name>'${zip}' WiGLE Data</name><open>1</open>' > "$zip".kml
+	echo '<?xml version="1.0" encoding="UTF-8"?><kml xmlns="http://earth.google.com/kml/2.0"><Folder><name>'"${zip}"' WiGLE Data</name><open>1</open>' > "$zip".kml
 
 	populateKMLfolder "N" "Open"
 	populateKMLfolder "Y" "WEP"

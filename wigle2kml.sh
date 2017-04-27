@@ -27,7 +27,7 @@ if [ $# -lt 4 ] ; then
 	exit 1
 fi
 
-if ! ( which csvtool 2>&1 >/dev/null )
+if ! ( which csvtool>/dev/null 2>&1 )
 then
 	echo "Please install \"csvtool\" from your distribution repository. Aborted."
 	echo ""
@@ -75,11 +75,11 @@ if ! [ -f oui.txt ] || [ oui.txt -ot 30DAYSAGO ]
 then
 	echo "Downloading IEEE MA-L (MAC Vendors)."
 	curl -# --compressed -O http://standards-oui.ieee.org/oui.txt
-	cat oui.txt | grep -F "(base 16)" | awk '{$2=$3="" ; print $0}' | awk -F"   " '{print $1 ":" $2}' > tempOUI
+	grep -F "(base 16)" oui.txt | awk '{$2=$3="" ; print $0}' | awk -F"   " '{print $1 ":" $2}' > tempOUI
 	mv tempOUI oui.txt
 fi
 
-rm 30DAYSAGO 2>&1 >/dev/null
+rm 30DAYSAGO>/dev/null 2>&1
 
 line=""
 line=$(grep -m 1 ^"\"$zip\"" ${zipfile})
@@ -175,13 +175,13 @@ function populateKMLfolder () {
 			echo "			Channel: ${array[14]} <BR>" >> "$zip".kml
 			echo "			QOS: ${array[16]} <BR>" >> "$zip".kml
 			if [ "${array[9]}" != " " ] ; then echo "			Flags: ${array[9]} <BR>" >> "$zip".kml ; fi
-			echo "			First Seen: $(echo ${array[7]} | sed s/[:-]//g ) <BR>" >> "$zip".kml
-			if [ "${array[8]}" != " " ] ; then echo "			Last Seen: ${array[8]} <BR>" >> "$zip".kml ; fi
-			echo "			Last Update: ${array[13]:0:8} ${array[13]:8:6} <BR>" >> "$zip".kml
+			echo "			First Seen: $(echo ${array[7]:0:10} | sed s/[:-]//g ) <BR>" >> "$zip".kml
+			if [ "${array[8]}" != " " ] ; then echo "			Last Seen: $(echo ${array[8]:0:10} | sed s/[:-]//g ) <BR>" >> "$zip".kml ; fi
+			echo "			Last Update: ${array[13]:0:8} <BR>" >> "$zip".kml
 			echo "			Latitude: ${array[11]} <BR>" >> "$zip".kml
 			echo "			Longitude: ${array[12]} <BR>" >> "$zip".kml
 			if [ "${array[15]}" != " " ] ; then echo "			Beacon Interval: ${array[15]}ms <BR>" >> "$zip".kml ; fi
-			echo "			Userfound: ${array[17]} <BR>" >> "$zip".kml
+#			echo "			Userfound: ${array[17]} <BR>" >> "$zip".kml
 			echo "		]]>" >> "$zip".kml
 			echo "	</description>" >> "$zip".kml
 			echo "	<name><![CDATA[${array[1]}]]></name>" >> "$zip".kml
@@ -193,7 +193,7 @@ function populateKMLfolder () {
 			echo "			</Icon>" >> "$zip".kml
 			echo "		</IconStyle>" >> "$zip".kml
 			echo "		<LabelStyle>" >> "$zip".kml
-			echo "			<scale>0.70</scale>" >> "$zip".kml
+#			echo "			<scale>0.70</scale>" >> "$zip".kml
 			echo "			<color>${label_color}</color>" >> "$zip".kml
 			echo "		</LabelStyle>" >> "$zip".kml
 			echo "	</Style>" >> "$zip".kml
